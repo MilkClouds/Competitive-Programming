@@ -1,9 +1,7 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include <bits/stdc++.h>
 #define rep(i,a,b) for(int i = (a); i < (b); i++)
-#define rep(i,a) rep(i, 0, a)
 #define rep2(i,a,b) for(int i = (b) - 1; i >= (a); i--)
-#define rep2(i,a) rep2(i, 0, a)
 #define all(x) (x).begin(), (x).end()
 #define sz(x) ((int)(x).size())  
 #define pb push_back
