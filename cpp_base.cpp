@@ -1,16 +1,17 @@
-# pragma GCC optimize ("O3")
-# pragma GCC optimize ("Ofast")
-# pragma GCC optimize ("unroll-loops")
+#define _CRT_SECURE_NO_WARNINGS
 #include <bits/stdc++.h>
-#define rep(a,b,c) for(ll a = b; a < c; a++)
-#define rep2(a,b,c) for(ll a = c - 1; a >=b; a--)
+#define rep(i,a,b) for(int i = (a); i < (b); i++)
+#define rep(i,a) rep(i, 0, a)
+#define rep2(i,a,b) for(int i = (b) - 1; i >= (a); i--)
+#define rep2(i,a) rep2(i, 0, a)
 #define all(x) (x).begin(), (x).end()
+#define sz(x) ((int)(x).size())  
 #define pb push_back
 #define x first
 #define y second
 using namespace std;
 using ll = long long;
-using tl = tuple<ll, ll, ll>;
+using tl = tuple<ll, ll, ll, ll>;
 using pl = pair<ll, ll>;
 using pi = pair<int, int>;
 using ld = long double;
