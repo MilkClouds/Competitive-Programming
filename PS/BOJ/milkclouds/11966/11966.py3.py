@@ -1,0 +1,1 @@
+print(1 if bin(int(input())).count('1')==1 else 0)

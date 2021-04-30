@@ -1,0 +1,1 @@
+print(bin(sum(map(int,input().split(),[2,2])))[2:])

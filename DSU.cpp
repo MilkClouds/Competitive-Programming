@@ -42,7 +42,7 @@ public:
             result[roots[i]].push_back(i);
         }
         result.erase(
-            remove_if(result.begin(), result.end(), [&](const vector<int>& v) { return v.empty(); })
+            remove_if(result.begin(), result.end(), [&](const vector<int>& v) { return v.empty(); }), result.end()
         );
         return result;
     }

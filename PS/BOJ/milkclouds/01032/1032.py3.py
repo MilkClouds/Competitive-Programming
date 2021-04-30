@@ -1,0 +1,1 @@
+print(*[i[0] if len(set(i))==1 else '?' for i in zip(*[input() for i in range(int(input()))])],sep='')

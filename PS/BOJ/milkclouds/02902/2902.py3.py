@@ -1,0 +1,1 @@
+print(*filter(lambda x:64<ord(x)<91,input()),sep='')
