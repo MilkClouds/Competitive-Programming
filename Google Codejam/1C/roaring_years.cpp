@@ -17,31 +17,18 @@ using pl = pair<ll, ll>;
 using pi = pair<int, int>;
 using ld = long double;
 
+const ll INF = 9e18;
 int TC;
-ll Y;
-string S;
-vector<int> v;
-bool choose(int n, int N){
-    if(n == N){
-        if(v.size() == 1) return 0;
-        int prev = -1, k = 0;
-        for(auto i: v) {
-            string tmp = S.substr(k, i);
-            if(tmp[0] == '0') return 0;
-            if(~prev && stoi(tmp) != prev + 1) return 0;
-            prev = stoi(tmp);
-            k += i;
-        }
-        return 1;
+ll Y, ans;
+
+ll f(ll n, ll m){
+    string S;
+    rep(i, 0, n) S += to_string(m + i);
+    try{
+        return stoll(S);
+    } catch(out_of_range& expn) {
+        return INF;
     }
-    bool ans = 0;
-    rep(i, 1, N - n + 1){
-        v.push_back(i);
-        ans |= choose(n + i, N);
-        if(ans) return 1;
-        v.pop_back();
-    }
-    return 0;
 }
 
 int main() {
@@ -49,14 +36,16 @@ int main() {
     cin >> TC;
     rep(tc, 1, TC + 1){
         cin >> Y;
-        while(1){
-            Y++;
-            v.clear();
-            S = to_string(Y);
-            if(choose(0, S.size())){
-                printf("Case #%d: %d\n", tc, Y);
-                break;
+        ans = INF;
+        rep(n, 2, 20){
+            ll l = 1, r = 12345678910LL;
+            while(l < r){
+                ll m = l + r >> 1;
+                if(f(n, m) > Y) r = m;
+                else l = m + 1;
             }
+            ans = min(ans, f(n, l));
         }
+        printf("Case #%d: %lld\n", tc, ans);
     }
 }
