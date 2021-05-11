@@ -19,10 +19,10 @@ using ld = long double;
 
 const ll mod = 1e13;
 ll N;
-typedef vector<vector<long long>> matrix;
+typedef vector<vector<__int128>> matrix;
 matrix operator * (const matrix &a, const matrix &b) {
     int n = a.size();
-    matrix c(n, vector<long long>(n));
+    matrix c(n, vector<__int128>(n));
     for (int i=0; i<n; i++) {
         for (int j=0; j<n; j++) {
             for (int k=0; k<n; k++) {
@@ -59,16 +59,16 @@ vector<ll> f(ll n, ll k){
     if(k == 3){
         rep(i, 1, tmod + 1){
             if(fibo(i) % vmod == n) ret.pb(i);
-        }        
+        }
         return ret;
     }
     auto prev = f(n % (vmod / 10), k - 1);
     for(auto j: prev){
-        cout << k << " " << j << " " << tmod / 10 << endl;
         rep(i, 0, 10){
             if(fibo(j + i * tmod / 10) % vmod == n) ret.pb(j + i * tmod / 10);
         }
     }
+    sort(all(ret));
     return ret;
 }
 int main() {
