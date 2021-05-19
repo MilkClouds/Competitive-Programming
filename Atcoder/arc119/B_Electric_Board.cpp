@@ -17,34 +17,24 @@ using pl = pair<ll, ll>;
 using pi = pair<int, int>;
 using ld = long double;
 
-const int MAX = 2e5 + 1, MOD = 1e9 + 7;
-int u[MAX], v[MAX], N, k, A[60], B[60];
-ll w[MAX], dist[MAX], ans;
-vector<pl> adj[MAX];
-
-void dfs(int u, int par){
-    for(auto [v, w]: adj[u]){
-        if(v == par) continue;
-		dist[v] = dist[u] ^ w;
-        dfs(v, u);
-    }
-}
-
+const int MAX = 5e5 + 10;
+int N;
+ll ans;
+string S, T;
+vector<int> A, B;
 int main() {
     cin.tie(0); cout.tie(0); ios_base::sync_with_stdio(false);
-    cin >> N;
-    rep(i, 1, N){
-        cin >> u[i] >> v[i] >> w[i];
-        adj[u[i]].pb({v[i], w[i]}); adj[v[i]].pb({u[i], w[i]});
+    cin >> N >> S >> T;
+    rep(i, 0, N){
+        if(S[i] == '0') A.pb(i);
+        if(T[i] == '0') B.pb(i);
     }
-	dfs(1, 0);
-	rep(j, 0, 60){
-		rep(i, 1, N + 1){
-			if(dist[i] & (1LL << j)) A[j]++;
-			else B[j]++;
-		}
-		ans += (1LL * A[j] * B[j] % MOD) * ((1LL << j) % MOD);
-		ans %= MOD;
-	}
-	cout << ans;
+    if(A.size() != B.size()){
+        cout << -1;
+        return 0;
+    }
+    rep(i, 0, A.size()){
+        ans += A[i] != B[i];
+    }
+    cout << ans;
 }

@@ -17,34 +17,19 @@ using pl = pair<ll, ll>;
 using pi = pair<int, int>;
 using ld = long double;
 
-const int MAX = 2e5 + 1, MOD = 1e9 + 7;
-int u[MAX], v[MAX], N, k, A[60], B[60];
-ll w[MAX], dist[MAX], ans;
-vector<pl> adj[MAX];
-
-void dfs(int u, int par){
-    for(auto [v, w]: adj[u]){
-        if(v == par) continue;
-		dist[v] = dist[u] ^ w;
-        dfs(v, u);
-    }
-}
-
+const int MAX = 3e5;
+int N, A[MAX];
+ll ans, S[MAX + 1];
+map<ll, int> M;
 int main() {
     cin.tie(0); cout.tie(0); ios_base::sync_with_stdio(false);
     cin >> N;
-    rep(i, 1, N){
-        cin >> u[i] >> v[i] >> w[i];
-        adj[u[i]].pb({v[i], w[i]}); adj[v[i]].pb({u[i], w[i]});
+    rep(i, 0, N) {cin >> A[i]; if(i & 1) A[i] *= -1;}
+    rep(i, 0, N) S[i + 1] = S[i] + A[i];
+    M[0]++;
+    rep(i, 0, N){
+        ans += M[S[i + 1]];
+        M[S[i + 1]]++;
     }
-	dfs(1, 0);
-	rep(j, 0, 60){
-		rep(i, 1, N + 1){
-			if(dist[i] & (1LL << j)) A[j]++;
-			else B[j]++;
-		}
-		ans += (1LL * A[j] * B[j] % MOD) * ((1LL << j) % MOD);
-		ans %= MOD;
-	}
-	cout << ans;
+    cout << ans;
 }
