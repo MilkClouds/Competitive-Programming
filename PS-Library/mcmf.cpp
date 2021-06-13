@@ -1,3 +1,16 @@
+/*
+
+Usage:
+MCMF mcmf(vertex);
+mcmf.set_source(R + C);
+mcmf.set_sink(R + C + 1);
+
+mcmf.add_edge(0, 1, 1, 0);
+int x,y;
+tie(x, y) = mcmf.mcmf();
+cout << x << " " << y << endl;
+*/
+
 struct MCMF {
 
     struct Edge {
@@ -11,12 +24,12 @@ struct MCMF {
     vector<int> h, inq; //johnson's algorithm, spfa
     vector<int> dist; //dijkstra
     vector<int> check, work; //max flow
-    int sz, s, e; //source, sink
+    int SZ, s, e; //source, sink
 
-    MCMF(int sz) :
-        adj(sz), h(sz), inq(sz),
-        dist(sz), check(sz), work(sz),
-        sz(sz), s(-1), e(-1) {
+    MCMF(int SZ) :
+        adj(SZ), h(SZ), inq(SZ),
+        dist(SZ), check(SZ), work(SZ),
+        SZ(SZ), s(-1), e(-1) {
     }
 
     void set_source(int t) { s = t; }
@@ -48,14 +61,14 @@ struct MCMF {
                 }
             }
         }
-        for (int i = 0; i < sz; i++) {
+        for (int i = 0; i < SZ; i++) {
             for (auto& j : adj[i]) {
                 if (j.res) j.cost += h[i] - h[j.nxt];
             }
         }
 
         //get shortest path DAG with dijkstra
-        priority_queue<pii, vector<pii>, greater<pii>> PQ;
+        priority_queue<pi, vector<pi>, greater<pi>> PQ;
         dist[s] = 0;
         PQ.push({ dist[s], s });
         while (PQ.size()) {
@@ -68,11 +81,11 @@ struct MCMF {
                 }
             }
         }
-        for (int i = 0; i < sz; i++) dist[i] += h[e] - h[s];
+        for (int i = 0; i < SZ; i++) dist[i] += h[e] - h[s];
     }
     bool update() { //update shortest path DAG in O(V+E)
         int mn = INF;
-        for (int i = 0; i < sz; i++) {
+        for (int i = 0; i < SZ; i++) {
             if (!check[i]) continue;
             for (const auto& j : adj[i]) {
                 if (j.res && !check[j.nxt]) {
@@ -81,7 +94,7 @@ struct MCMF {
             }
         }
         if (mn >= INF) return 0;
-        for (int i = 0; i < sz; i++) {
+        for (int i = 0; i < SZ; i++) {
             if (!check[i]) dist[i] += mn;
         }
         return 1;
@@ -102,7 +115,7 @@ struct MCMF {
         }
         return 0;
     }
-    pii mcmf() { //cost, flow
+    pi mcmf() { //cost, flow
         if (s == -1 || e == -1) return { -1, -1 };
         init();
         int cost = 0, fl = 0;
