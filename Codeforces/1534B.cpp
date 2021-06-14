@@ -8,10 +8,6 @@
 #define all(x) (x).begin(), (x).end()
 #define sz(x) ((int)(x).size())
 #define pb push_back
-#define eb emplace_back
-#define em emplace
-#define popcount __builtin_popcount
-#define popcountll __builtin_popcountll
 #define x first
 #define y second
 using namespace std;
@@ -21,8 +17,25 @@ using pl = pair<ll, ll>;
 using pi = pair<int, int>;
 using ld = long double;
 
-
+ll solve(){
+    int N;
+    ll ans = 0;
+    cin >> N;
+    vector<int> A(N + 2, 0);
+    rep(i, 0, N) cin >> A[i + 1];
+    rep(i, 1, N + 1){
+        if(A[i - 1] < A[i] && A[i] > A[i + 1]){
+            ll tmp = max(A[i - 1], A[i + 1]);
+            ans += A[i] - tmp;
+            A[i] = tmp;
+        }
+        ans += max(0, A[i] - A[i - 1]) + max(0, A[i] - A[i + 1]);
+    }
+    return ans;
+}
+int TC;
 int main() {
-    cin.tie(0) -> sync_with_stdio(false); cout.tie(0);
-    
+    cin.tie(0); cout.tie(0); ios_base::sync_with_stdio(false);
+    cin >> TC;
+    while(TC--) cout << solve() << "\n";
 }

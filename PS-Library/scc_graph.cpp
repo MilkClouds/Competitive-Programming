@@ -1,9 +1,9 @@
 struct scc_graph {
     scc_graph() : scc_graph(0) {}
-    scc_graph(int N) : dfsn(N), sn(N), N(N) {}
+    scc_graph(int N) : dfsn(N), sn(N), finished(N), N(N) {}
 
-    int cnt, SN, N;
-    vector<int> dfsn, sn;
+    int cnt = 0, SN = 0, N;
+    vector<int> dfsn, sn, finished;
     vector<vector<int>> SCC;
     stack<int> S;
 

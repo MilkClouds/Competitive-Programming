@@ -8,10 +8,6 @@
 #define all(x) (x).begin(), (x).end()
 #define sz(x) ((int)(x).size())
 #define pb push_back
-#define eb emplace_back
-#define em emplace
-#define popcount __builtin_popcount
-#define popcountll __builtin_popcountll
 #define x first
 #define y second
 using namespace std;
@@ -21,8 +17,24 @@ using pl = pair<ll, ll>;
 using pi = pair<int, int>;
 using ld = long double;
 
-
+const int MAX = 1e5;
+const ll INF = 6e18;
+int N, Q;
+ll A[MAX], K;
 int main() {
-    cin.tie(0) -> sync_with_stdio(false); cout.tie(0);
-    
+    cin.tie(0); cout.tie(0); ios_base::sync_with_stdio(false);
+    cin >> N >> Q;
+    rep(i, 0, N) cin >> A[i];
+    sort(A, A + N);
+    rep(i, 0, Q){
+        cin >> K;
+        ll l = 0, r = INF;
+        while(l + 1 < r){
+            ll m = l + r >> 1;
+            ll tmp = m - (upper_bound(A, A + N, m) - A);
+            if(tmp < K) l = m;
+            else r = m;
+        }
+        cout << r << "\n";
+    }
 }

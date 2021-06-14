@@ -8,10 +8,6 @@
 #define all(x) (x).begin(), (x).end()
 #define sz(x) ((int)(x).size())
 #define pb push_back
-#define eb emplace_back
-#define em emplace
-#define popcount __builtin_popcount
-#define popcountll __builtin_popcountll
 #define x first
 #define y second
 using namespace std;
@@ -21,8 +17,20 @@ using pl = pair<ll, ll>;
 using pi = pair<int, int>;
 using ld = long double;
 
-
+ll A, B, C;
+int cmp(ll A, ll B){
+    if(A < B) return 1;
+    else if(A > B) return -1;
+    return 0;
+}
+int solve(ll A, ll B, ll C){
+    if(C & 1){
+        return cmp(A, B);
+    } return cmp(abs(A), abs(B));
+}
 int main() {
-    cin.tie(0) -> sync_with_stdio(false); cout.tie(0);
-    
+    cin.tie(0); cout.tie(0); ios_base::sync_with_stdio(false);
+    cin >> A >> B >> C;
+    int tmp = solve(A, B, C);
+    cout << (tmp ? (tmp < 0 ? ">" : "<") : "=");
 }
