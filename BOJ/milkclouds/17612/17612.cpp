@@ -12,40 +12,36 @@
 #define y second
 using namespace std;
 using ll = long long;
-using tl = tuple<ll, ll, ll, ll>;
+using tl = tuple<ll, ll, ll>;
 using pl = pair<ll, ll>;
 using pi = pair<int, int>;
 using ld = long double;
 using ti = tuple<int, int, int>;
 
 const int MAX = 1e5;
-int N, k, cnt;
-ll ans;
+int N, k;
+ll ans, tim, cash, ppl, cnt;
 pi A[MAX];
-deque<pi> B[MAX * 20 + 1];
-multiset<int> T;
-void insert(deque<pi>& deq, pi o){
-    if(deq.empty()) deq.pb(o);
-    else{
-        if(deq.front() < o) deq.pb(o);
-        else 
-    }
+priority_queue<tl> pq;
+set<int> cashier;
+void checkout(){
+    tie(tim, cash, ppl) = pq.top(); pq.pop();
+    ans += (++cnt) * ppl;
+    cashier.insert(cash);
 }
 int main() {
     cin.tie(0); cout.tie(0); ios_base::sync_with_stdio(false);
     cin >> N >> k;
-    rep(i, 0, N) cin >> A[i].y >> A[i].x;
+    rep(i, 0, N) cin >> A[i].x >> A[i].y;
     rep(i, 0, k) {
-        B[0].pb({i, 0});
-        T.insert(0);
+        cashier.insert(i);
     }
     rep(i, 0, N){
-        int time = *T.begin(), cash, r;
-        T.erase(T.find(time));
-        tie(cash, r) = *B[time].rbegin();
-        B[time].erase(B[time].rbegin());
-        int ntime = time + A[i].x;
-        T.insert(ntime);
-        B[ntime].
+        while(cashier.empty() || (!pq.empty() && tim == get<0>(pq.top()))) checkout();
+        cash = *cashier.begin();
+        cashier.erase(cashier.begin());
+        pq.push({tim - A[i].y, cash, A[i].x});
     }
+    while(!pq.empty()) checkout();
+    cout << ans << endl;
 }
