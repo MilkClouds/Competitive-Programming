@@ -21,38 +21,14 @@ using pl = pair<ll, ll>;
 using pi = pair<int, int>;
 using ld = long double;
 
-int N, K, t, b;
-string S, T;
-vector<int> v;
+int N, K, l = -1, p = 1;
+string S;
 int main() {
     cin.tie(0) -> sync_with_stdio(false); cout.tie(0);
     cin >> N >> K >> S;
-    rep(i, 1, N) {
-        if(S[i] > S[0]) {
-            N = i;
-            break;
-        }
-        if(S[i] == S[0]) v.pb(i);
+    while(++l < N){
+        if(S[l] > S[l % p]) break;
+        if(S[l] < S[l % p]) p = l + 1;
     }
-    v.pb(N);
-    t = v[0];
-    rep(i, 0, v.size() - 1){
-        bool flag = 0;
-        rep(j, 0, v[i + 1] - v[i]){
-            if(S[j + v[i]] == S[j % v[i]]) continue;
-            if(S[j + v[i]] > S[j % v[i]]) flag = 1;
-            break;
-        }
-        //cout << i << " " << v[i] << " " << flag << endl;
-        if(flag) break;
-        t = v[i + 1];
-    }
-    T = S.substr(0, t);
-    rep(_, 0, K / t){
-        cout << T;
-    }
-    rep(i, 0, K - (K / t) * t){
-        cout << S[i];
-    }
-    cout << '\n';
+    rep(i, 0, K) cout << S[i % p];
 }
