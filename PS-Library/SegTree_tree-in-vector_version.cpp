@@ -34,23 +34,23 @@ private:
         return tree[node] = op_func(init(node * 2 + 1, l, m, v), init(node * 2 + 2, m, r, v));
     }
     ll query(int node, int l, int r, int s, int e){
-        if(s <= l && r <= e) return tree[node];
         if(r <= s || e <= l) return 0;
+        if(s <= l && r <= e) return tree[node];
         int m = l + r >> 1;
         return op_func(query(node * 2 + 1, l, m, s, e), query(node * 2 + 2, m, r, s, e));
     }
     ll query(int node, int l, int r, int k){
-        if(r - l == 1) return tree[node];
         if(k < l || r <= k) return 0;
+        if(r - l == 1) return tree[node];
         int m = l + r >> 1;
         return op_func(query(node * 2 + 1, l, m, k), query(node * 2 + 2, m, r, k));
     }
     ll update(int node, int l, int r, int k, ll x){
+        if(r <= k || k < l) return tree[node];
         if(r - l == 1){
             tree[node] += x;
             return tree[node];
         }
-        if(r <= k || k < l) return tree[node];
         int m = l + r >> 1;
         return tree[node] = op_func(update(node * 2 + 1, l, m, k, x), update(node * 2 + 2, m, r, k, x));
     }
@@ -64,7 +64,6 @@ private:
         traverse(node * 2 + 2, m, r);
     }
 };
-
 
 
 class SegTree{
