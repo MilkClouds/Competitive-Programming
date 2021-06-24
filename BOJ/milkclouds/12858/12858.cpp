@@ -22,73 +22,128 @@ using ti = tuple<int, int, int>;
 using pl = pair<ll, ll>;
 using tl = tuple<ll, ll, ll>;
 
+const int MAX = 1e5 + 10;
+int N, M, l, r;
+vector<ll> A, B;
+ll c;
+
 ll gcd(ll a, ll b){
+    a = abs(a); b = abs(b);
     if(a < b) swap(a, b);
-    if(b == -1) return a;
+    if(b == 0) return a;
     if(a % b == 0) return b;
     return gcd(b, a % b);
 }
 
-class TreeNode {
+inline ll op_func(ll a, ll b) {return gcd(a, b);}
+
+struct SegTree{
 public:
-    bool flag = 0;
-    int node, l, r;
-    ll value, lazy;
-    TreeNode* left, right;
-    TreeNode(){}
-    TreeNode(int node, int l, int r, vector<ll>& v){
-        value = v[node];
-        left = right = nullptr;
-        if(r - l == 1) return;
-        int m = l + r >> 1;
-        left = new TreeNode(node * 2, l, m, v);
-        right = new TreeNode(node * 2 + 1, m, r, v);
+    SegTree() : SegTree(0) {}
+    explicit SegTree(int N): N(N), tree(N * 4, 0) {}
+    explicit SegTree(int N, vector<ll>& v): N(N), tree(N * 4, 0) {init(0, 0, N, v);}
+    // range query
+    ll query(int s, int e){
+        return query(0, 0, N, s, e);
     }
-    void push(){
-        if(lazy == 0) return;
-        for(auto child: {left, right}){
-            if(child != nullptr) child.lazy += lazy;
+    // query
+    ll query(int k){
+        return query(0, 0, N, k);
+    }
+    void update(int k, int x){
+        update(0, 0, N, k, x);
+    }
+    void traverse(){
+        traverse(0, 0, N);
+    }
+private:
+    int N;
+    vector<ll> tree;
+    ll init(int node, int l, int r, vector<ll>& v){
+        if(r - l == 1) {
+            return tree[node] = v[l];
         }
-        lazy = 0;
+        int m = l + r >> 1;
+        return tree[node] = op_func(init(node * 2 + 1, l, m, v), init(node * 2 + 2, m, r, v));
     }
-    void update(int s, int e, int x){
-        push();
-        if(s <= l && r <= e){
-            lazy += x;
-            push();
+    ll query(int node, int l, int r, int s, int e){
+        if(s <= l && r <= e) return tree[node];
+        if(r <= s || e <= l) return 0;
+        int m = l + r >> 1;
+        return op_func(query(node * 2 + 1, l, m, s, e), query(node * 2 + 2, m, r, s, e));
+    }
+    ll query(int node, int l, int r, int k){
+        if(r - l == 1) return tree[node];
+        if(k < l || r <= k) return 0;
+        int m = l + r >> 1;
+        return op_func(query(node * 2 + 1, l, m, k), query(node * 2 + 2, m, r, k));
+    }
+    ll update(int node, int l, int r, int k, ll x){
+        if(r - l == 1){
+            tree[node] += x;
+            return tree[node];
+        }
+        if(r <= k || k < l) return tree[node];
+        int m = l + r >> 1;
+        return tree[node] = op_func(update(node * 2 + 1, l, m, k, x), update(node * 2 + 2, m, r, k, x));
+    }
+    void traverse(int node, int l, int r){
+        cout << node << " " << l << " " << r << " " << tree[node] << endl;
+        if(r - l == 1){
             return;
         }
-        if(e <= l || r <= s) return;
-        for(auto child: {left, right}){
-            child.update(s, e, x);
-        }
-    }
-    ll query(int s, int e){
-        push();
-        if(s <= l && r <= e) return value;
-        if(e <= l || r <= s) return 0;
-        ll ret = 0;
-        for(auto child: {left, right}){
-            ret += child.query(s, e);
-        }
-        return ret;
+        int m = l + r >> 1;
+        traverse(node * 2 + 1, l, m);
+        traverse(node * 2 + 2, m, r);
     }
 };
 
-int N, c, l, r;
-vector<ll> A;
+struct FenwickTree {
+public:
+    FenwickTree() : FenwickTree(0) {}
+    explicit FenwickTree(int N) : N(N), tree(N + 1, 0) {}
+    ll query(int i) {
+        ll ret = 0; i++;
+        for(; i; i ^= i & -i) ret += tree[i];
+        return ret;
+    }
+    void update(int i, ll x) {
+        i++;
+        for(; i <= N; i += i & -i) tree[i] += x;
+    }
+private:
+    int N;
+    vector<ll> tree;
+};
+
+FenwickTree tree(MAX);
+ll get(int k){
+    return A[k] + tree.query(k);
+}
 int main() {
     cin.tie(0) -> sync_with_stdio(false); cout.tie(0);
     cin >> N;
-    A.assign(N);
+    A.assign(N, 0);
+    B.assign(N - 1, 0);
     rep(i, 0, N) cin >> A[i];
-    TreeNode root = new TreeNode(1, 0, N, A);
+    rep(i, 0, N - 1) B[i] = A[i + 1] - A[i];
+    SegTree segtree(N - 1, B);
+    // segtree.traverse();
     cin >> M;
-    while(M--){
-        cin >> c >> l >> r;
-        if(c == 0) cout << root.query(l, r) << "\n";
+    while(M--) {
+        cin >> c >> l >> r; l--; r--;
+        cout << "!" << c << " " << l << " " << r << endl;
+        cout << get(1) << " " << segtree.query(0, 1) << " " << segtree.query(1, 2) << endl;
+        if(c == 0) {
+            if(l == r) cout << get(l) << "\n";
+            else if(r - l == 1) cout << gcd(get(l), get(r)) << "\n";
+            else cout << gcd(get(l), segtree.query(l, r)) << "\n";
+        }
         else{
-            root.update(l, r, c);
+            tree.update(l, c);
+            tree.update(r + 1, -c);
+            segtree.update(l - 1, c);
+            segtree.update(r, -c);
         }
     }
 }

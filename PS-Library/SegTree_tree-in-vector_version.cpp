@@ -2,46 +2,69 @@
 using ll = long long;
 using namespace std;
 
+inline ll op_func(ll a, ll b){return a + b;}
+
 struct SegTree{
 public:
     SegTree() : SegTree(0) {}
     explicit SegTree(int N): N(N), tree(N * 4, 0) {}
+    explicit SegTree(int N, vector<ll>& v): N(N), tree(N * 4, 0) {init(0, 0, N, v);}
     // range query
     ll query(int s, int e){
-        return query(1, 0, N, s, e);
+        return query(0, 0, N, s, e);
     }
     // query
     ll query(int k){
-        return query(1, 0, N, k);
+        return query(0, 0, N, k);
     }
     void update(int k, int x){
-        update(1, 0, N, k, x);
+        update(0, 0, N, k, x);
+    }
+    void traverse(){
+        traverse(0, 0, N);
     }
 private:
     int N;
-    vector<int> tree;
+    vector<ll> tree;
+    ll init(int node, int l, int r, vector<ll>& v){
+        if(r - l == 1) {
+            return tree[node] = v[l];
+        }
+        int m = l + r >> 1;
+        return tree[node] = op_func(init(node * 2 + 1, l, m, v), init(node * 2 + 2, m, r, v));
+    }
     ll query(int node, int l, int r, int s, int e){
         if(s <= l && r <= e) return tree[node];
         if(r <= s || e <= l) return 0;
         int m = l + r >> 1;
-        return query(node * 2, l, m, s, e) + query(node * 2 + 1, m, r, s, e);
+        return op_func(query(node * 2 + 1, l, m, s, e), query(node * 2 + 2, m, r, s, e));
     }
     ll query(int node, int l, int r, int k){
         if(r - l == 1) return tree[node];
         if(k < l || r <= k) return 0;
         int m = l + r >> 1;
-        return query(node * 2, l, m, k) + query(node * 2 + 1, m, r, k);
+        return op_func(query(node * 2 + 1, l, m, k), query(node * 2 + 2, m, r, k));
     }
-    ll update(int node, int l, int r, int k, int x){
+    ll update(int node, int l, int r, int k, ll x){
         if(r - l == 1){
             tree[node] += x;
             return tree[node];
         }
-        if(r <= k || k < l) return;
+        if(r <= k || k < l) return tree[node];
         int m = l + r >> 1;
-        return tree[node] = update(node * 2, l, m, k, x) + update(node * 2 + 1, m, r, k, x);
+        return tree[node] = op_func(update(node * 2 + 1, l, m, k, x), update(node * 2 + 2, m, r, k, x));
+    }
+    void traverse(int node, int l, int r){
+        cout << node << " " << l << " " << r << " " << tree[node] << endl;
+        if(r - l == 1){
+            return;
+        }
+        int m = l + r >> 1;
+        traverse(node * 2 + 1, l, m);
+        traverse(node * 2 + 2, m, r);
     }
 };
+
 
 
 class SegTree{
@@ -69,16 +92,16 @@ private:
     vector<ll> tree, lazy;
     ll init(int node, int l, int r, vector<ll>& v){
         if(r - l == 1) {
-            tree[node] = v[l];
+            return tree[node] = v[l];
         }
         int m = l + r >> 1;
-        tree[node] = init(node * 2, l, m, v) + init(node * 2 + 1, m, r, v);
+        tree[node] = init(node * 2 + 1, l, m, v) + init(node * 2 + 2, m, r, v);
     }
     void push(int node, int l, int r){
         if(lazy[node] == 0) return;
         tree[node] += lazy[node] * (r - l);
         if(r - l > 1) {
-            for(auto v: {node * 2, node * 2 + 1}){
+            for(auto v: {node * 2 + 1, node * 2 + 2}){
                 lazy[v] += lazy[node];
             }
         }
@@ -89,16 +112,16 @@ private:
         if(s <= l && r <= e) return tree[node];
         if(r <= s || e <= l) return 0;
         int m = l + r >> 1;
-        return query(node * 2, l, m, s, e) + query(node * 2 + 1, m, r, s, e);
+        return query(node * 2 + 1, l, m, s, e) + query(node * 2 + 2, m, r, s, e);
     }
     ll query(int node, int l, int r, int k){
         push(node, l, r);
         if(r - l == 1) return tree[node];
         if(k < l || r <= k) return 0;
         int m = l + r >> 1;
-        return query(node * 2, l, m, k) + query(node * 2 + 1, m, r, k);
+        return query(node * 2 + 1, l, m, k) + query(node * 2 + 2, m, r, k);
     }
-    void update(int node, int l, int r, int s, int e, int x){
+    void update(int node, int l, int r, int s, int e, ll x){
         push(node, l, r);
         if(r <= s || e <= l) return;
         if(s <= l && r <= e){
@@ -106,9 +129,9 @@ private:
             push(node, l, r);
         }
         int m = l + r >> 1;
-        update(node * 2, l, m, s, e, x);
-        update(node * 2 + 1, m, r, s, e, x);
-        tree[node] = tree[node * 2] + tree[node * 2 + 1];
+        update(node * 2 + 1, l, m, s, e, x);
+        update(node * 2 + 2, m, r, s, e, x);
+        tree[node] = tree[node * 2 + 1] + tree[node * 2 + 2];
     }
 }
 
