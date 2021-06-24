@@ -2,6 +2,8 @@
 using ll = long long;
 using namespace std;
 
+
+
 inline ll op_func(ll a, ll b){return a + b;}
 
 struct SegTree{
