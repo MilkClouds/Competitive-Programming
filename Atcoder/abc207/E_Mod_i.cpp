@@ -22,48 +22,24 @@ using ti = tuple<int, int, int>;
 using pl = pair<ll, ll>;
 using tl = tuple<ll, ll, ll>;
 
-const int MAX = 3030;
+const int MAX = 3e3 + 10, MOD = 1e9 + 7;
 int N;
-ll A[MAX], S[MAX];
-template<class T> struct mi {
-	T val;
-	mi() { val = 0; }
-	mi(const ll& v) {
-		val = (-MOD <= v && v <= MOD) ? v : v % MOD;
-		if (val < 0) val += MOD;
-	}
-	mi operator + (const mi& m) {
-		T tmp = (val + m.val) % MOD;
-		return tmp + (tmp < 0 ? MOD : 0);
-	}
-	mi operator - (const mi& m) {
-		T tmp = (val - m.val) % MOD;
-		return tmp + (tmp < 0 ? MOD : 0);
-	}
-	mi operator * (const mi& m) {
-		T tmp = (val * m.val) % MOD;
-		return tmp;
-	}
-	mi& operator += (const mi& m) {
-		if ((val += m.val) >= MOD) val -= MOD;
-		return *this;
-	}
-	mi& operator -= (const mi& m) {
-		if ((val -= m.val) < 0) val += MOD;
-		return *this;
-	}
-	mi& operator *= (const mi& m) {
-		val = (val * m.val) % MOD;
-		return *this;
-	}
-};
-mi<ll> dp[MAX];
+ll A[MAX], S[MAX], dp[MAX][MAX], ans, memo[MAX][MAX];
 int main() {
     cin.tie(0) -> sync_with_stdio(false); cout.tie(0);
     cin >> N;
-    rep(i, 0, N) cin >> A[i];
-    rep(i, 0, N) S[i + 1] = S[i] + A[i];
-    rep(i, 0, N){
-        rep(j, i + 1, N + 1) S[j] - S[i]
+    rep(i, 0, N) cin >> A[i + 1];
+    rep(i, 1, N + 1) S[i] = S[i - 1] + A[i];
+    memo[1][0] = dp[0][0] = 1;
+    rep(i, 1, N + 1) {
+        rep(j, 1, i + 1){
+            dp[i][j] = memo[j][S[i] % j];
+        }
+        rep(j, 1, i + 2){
+            memo[j][S[i] % j] += dp[i][j - 1];
+            memo[j][S[i] % j] %= MOD;
+        }
     }
+    rep(i, 0, N) ans += dp[N][i + 1];
+    cout << ans % MOD << endl;
 }
