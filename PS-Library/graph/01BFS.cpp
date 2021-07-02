@@ -1,6 +1,6 @@
 const int MAX = 1e5, INF = 1e9;
 vector<int> dist;
-vector<int> adj[MAX];
+vector<pi> adj[MAX];
 vector<int> solve(int S){
     dist.assign(MAX, INF);
     dist[S] = 0;
