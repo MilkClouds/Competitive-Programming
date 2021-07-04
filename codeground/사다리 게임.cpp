@@ -48,8 +48,8 @@ void solve(int S){
 void solve(){
     ll ans = 0;
     cin >> N >> k >> m;
+    rep(i, 1, 2 * N + 4 * k + 1) adj[i].clear();
     rep(i, 1, N + 1){
-        adj[i].clear();
         Q[i].clear();
         Q[i].pb(i);
     }
@@ -68,7 +68,8 @@ void solve(){
     rep(i, 1, N + 1){
         Q[i].pb(N + i);
         rep(j, 1, Q[i].size()){
-            if(Q[i][j - 1] + 1 != Q[i][j]) adj[Q[i][j - 1]].eb(Q[i][j], 0);
+            if(Q[i][j] % 2 == 0 && Q[i][j - 1] + 1 == Q[i][j]) continue;
+            adj[Q[i][j - 1]].eb(Q[i][j], 0);
         }
     }
     rep(i, 1, N + 1) solve(i);
