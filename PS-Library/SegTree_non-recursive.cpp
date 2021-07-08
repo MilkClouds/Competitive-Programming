@@ -3,11 +3,11 @@ using ll = long long;
 using namespace std;
 
 const int MAX = 1e5, INF = 1e9;
-struct tree{
-    int t[MAX * 4], n;
-    void init(int n){
-        fill(t, t + n, INF);
-        tree::n = n;
+struct SegTree{
+    SegTree(): SegTree(0) {}
+    SegTree(int n){
+        t.assign(n * 4, INF);
+        this -> n = n;
     }
     int op_func(int a, int b){
         return min(a, b);
@@ -26,4 +26,6 @@ struct tree{
         }
         return ans;
     }
-} SegTree;
+    vector<int> t;
+    int n;
+};
