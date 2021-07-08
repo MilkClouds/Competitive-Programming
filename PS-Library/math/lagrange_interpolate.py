@@ -1,3 +1,9 @@
+"""
+
+Example Problem: ARC 118 F Growth Rate
+
+"""
+
 from functools import lru_cache
 
 MOD = 998_244_353
