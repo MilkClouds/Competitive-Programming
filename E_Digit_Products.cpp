@@ -21,24 +21,8 @@ using ti = tuple<int, int, int>;
 using pl = pair<ll, ll>;
 using tl = tuple<ll, ll, ll>;
 
-int N, C[1234], cnt;
-struct ABC{
-    int x, y, z;
-    bool operator < (const ABC& other) const {
-        return z > other.z;
-    }
-} A[1234];
+
 int main() {
     cin.tie(0) -> sync_with_stdio(false); cout.tie(0);
-    cin >> N;
-    rep(i, 0, N){
-        cin >> A[i].x >> A[i].y >> A[i].z;
-    }
-    sort(A, A + N);
-    rep(i, 0, N){
-        if(C[A[i].x] >= 2) continue;
-        cout << A[i].x << " " << A[i].y << "\n";
-        if(++cnt == 3) break;
-        C[A[i].x]++;
-    } 
+    
 }

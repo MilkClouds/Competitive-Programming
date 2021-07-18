@@ -21,32 +21,33 @@ using ti = tuple<int, int, int>;
 using pl = pair<ll, ll>;
 using tl = tuple<ll, ll, ll>;
 
-const int MOD = 1e9 + 7;
-void solve(){
-    int N, L, R;
-    cin >> N >> L >> R;
-    vector<pi> ev, evp, evn, evt;
-    rep(i, 1, N + 1){
-        ev.eb(L - i, 1);
-        ev.eb(R - i + 1, -1);
+ll TC, N;
+map<pair<ll, int>, bool> dp;
+bool query(ll N, int C){
+    if(N == 0) return 1;
+    if(dp.find({N, C}) != dp.end()) return dp.find({N, C})->y;
+    bool ret = 0;
+    rep(a1, 0, 4) rep(a2, 0, 4) rep(a3, 0, 4) rep(a4, 0, 4) rep(a5, 0, 4) {
+        int tmpi = a1 + a2 + a3 + a4 + a5;
+        int tmpb = bool(a1) + bool(a2) + bool(a3) + bool(a4) + bool(a5);
+        if(tmpi % 10 != N % 10) continue;
+        if(N < tmpi) continue;
+        if(tmpb > C) continue;
+        ret |= query((N - tmpi) / 10, tmpb);
     }
-    sort(all(ev));
-    int tmp = 0;
-    for(auto p: ev){
-        tmp += p.y;
-        if(p.x > 0) evp.eb(p.x, tmp);
-        else if(p.x < 0) evt.eb(p.x, tmp);
-    }
-    rep2(i, 0, N){
-        if(i)evn.eb(-evt[i].x + 1, evt[i - 1].y);
-        else evn.eb(-evt[i].x + 1, 0);
-    }
-    rep(i, 0, N) cout << evp[i].x << " " << evp[i].y << endl;
+    return dp[{N, C}] = ret;
 }
-
 int main() {
     cin.tie(0) -> sync_with_stdio(false); cout.tie(0);
-    int TC;
     cin >> TC;
-    while(TC--) solve();
+    while(TC--){
+        cin >> N;
+        rep(i, 1, 20){
+            if(query(N, i)){
+                cout << i << "\n";
+                break;
+            }
+            assert(i <= 5);
+        }
+    }
 }

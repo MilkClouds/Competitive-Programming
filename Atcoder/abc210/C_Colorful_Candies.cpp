@@ -21,32 +21,24 @@ using ti = tuple<int, int, int>;
 using pl = pair<ll, ll>;
 using tl = tuple<ll, ll, ll>;
 
-const int MOD = 1e9 + 7;
-void solve(){
-    int N, L, R;
-    cin >> N >> L >> R;
-    vector<pi> ev, evp, evn, evt;
-    rep(i, 1, N + 1){
-        ev.eb(L - i, 1);
-        ev.eb(R - i + 1, -1);
-    }
-    sort(all(ev));
-    int tmp = 0;
-    for(auto p: ev){
-        tmp += p.y;
-        if(p.x > 0) evp.eb(p.x, tmp);
-        else if(p.x < 0) evt.eb(p.x, tmp);
-    }
-    rep2(i, 0, N){
-        if(i)evn.eb(-evt[i].x + 1, evt[i - 1].y);
-        else evn.eb(-evt[i].x + 1, 0);
-    }
-    rep(i, 0, N) cout << evp[i].x << " " << evp[i].y << endl;
-}
-
+const int MAX = 3e5;
+int N, K, C[MAX], ans, cnt;
+multiset<int> MS;
 int main() {
     cin.tie(0) -> sync_with_stdio(false); cout.tie(0);
-    int TC;
-    cin >> TC;
-    while(TC--) solve();
+    cin >> N >> K;
+    rep(i, 0, N) cin >> C[i];
+    rep(i, 0, K) {
+        if(MS.find(C[i]) == MS.end()) cnt++;
+        MS.insert(C[i]);
+    }
+    ans = cnt;
+    rep(i, 0, N - K){
+        MS.erase(MS.find(C[i]));
+        if(MS.find(C[i]) == MS.end()) cnt--;
+        if(MS.find(C[i + K]) == MS.end()) cnt++;
+        MS.insert(C[i + K]);
+        ans = max(ans, cnt);
+    }
+    cout << ans << endl;
 }

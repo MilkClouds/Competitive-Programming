@@ -21,6 +21,7 @@ using pl = pair<ll, ll>;
 using pi = pair<int, int>;
 using ld = long double;
 
+// https://codeforces.com/contest/1539/problem/E
 
 const int MAX = 1e5;
 int N, M, K, l, r = 1, a, b, c, d, ans[MAX];

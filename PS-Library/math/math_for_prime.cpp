@@ -11,6 +11,10 @@ void eratos() {
 }
 // #####################################################################
 // version 2
+const ll MAX = 3e6;
+vector<ll> pn;
+ll arr[MAX];
+
 void eratos() {
 	for (ll i = 2; i < MAX; i++) {
 		if (arr[i]) continue;

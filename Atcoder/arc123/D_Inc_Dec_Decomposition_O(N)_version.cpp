@@ -21,32 +21,24 @@ using ti = tuple<int, int, int>;
 using pl = pair<ll, ll>;
 using tl = tuple<ll, ll, ll>;
 
-const int MOD = 1e9 + 7;
-void solve(){
-    int N, L, R;
-    cin >> N >> L >> R;
-    vector<pi> ev, evp, evn, evt;
-    rep(i, 1, N + 1){
-        ev.eb(L - i, 1);
-        ev.eb(R - i + 1, -1);
-    }
-    sort(all(ev));
-    int tmp = 0;
-    for(auto p: ev){
-        tmp += p.y;
-        if(p.x > 0) evp.eb(p.x, tmp);
-        else if(p.x < 0) evt.eb(p.x, tmp);
-    }
-    rep2(i, 0, N){
-        if(i)evn.eb(-evt[i].x + 1, evt[i - 1].y);
-        else evn.eb(-evt[i].x + 1, 0);
-    }
-    rep(i, 0, N) cout << evp[i].x << " " << evp[i].y << endl;
-}
-
+const int MAX = 2e5 + 10;
+int N;
+ll A[MAX], B[MAX], C[MAX], ret, S, x;
+vector<ll> V;
 int main() {
     cin.tie(0) -> sync_with_stdio(false); cout.tie(0);
-    int TC;
-    cin >> TC;
-    while(TC--) solve();
+    cin >> N;
+    rep(i, 0, N) cin >> A[i];
+    C[0] = -A[0];
+    rep(i, 1, N) {
+        B[i] = B[i - 1] + max(0LL, A[i] - A[i - 1]);
+        C[i] = C[i - 1] + max(0LL, A[i - 1] - A[i]);
+    }
+    rep(i, 0, N) {
+        V.pb(B[i]);
+        V.pb(C[i]);
+    }
+    auto pos = V.begin() + N;
+    nth_element(V.begin(), pos, V.end());
+    cout << transform_reduce(all(V), 0LL, plus<>(), [&](ll x){return abs(x - *pos);}) << endl;
 }

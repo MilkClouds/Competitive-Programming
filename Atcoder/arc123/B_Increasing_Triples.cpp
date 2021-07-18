@@ -21,32 +21,25 @@ using ti = tuple<int, int, int>;
 using pl = pair<ll, ll>;
 using tl = tuple<ll, ll, ll>;
 
-const int MOD = 1e9 + 7;
-void solve(){
-    int N, L, R;
-    cin >> N >> L >> R;
-    vector<pi> ev, evp, evn, evt;
-    rep(i, 1, N + 1){
-        ev.eb(L - i, 1);
-        ev.eb(R - i + 1, -1);
-    }
-    sort(all(ev));
-    int tmp = 0;
-    for(auto p: ev){
-        tmp += p.y;
-        if(p.x > 0) evp.eb(p.x, tmp);
-        else if(p.x < 0) evt.eb(p.x, tmp);
-    }
-    rep2(i, 0, N){
-        if(i)evn.eb(-evt[i].x + 1, evt[i - 1].y);
-        else evn.eb(-evt[i].x + 1, 0);
-    }
-    rep(i, 0, N) cout << evp[i].x << " " << evp[i].y << endl;
-}
-
+const int MAX = 1e5 + 10;
+int N, A[MAX], B[MAX], C[MAX], cnt;
+multiset<int> seta, setc;
 int main() {
     cin.tie(0) -> sync_with_stdio(false); cout.tie(0);
-    int TC;
-    cin >> TC;
-    while(TC--) solve();
+    cin >> N;
+    rep(i, 0, N) cin >> A[i];
+    rep(i, 0, N) cin >> B[i];
+    rep(i, 0, N) cin >> C[i];
+    sort(B, B + N);
+    rep(i, 0, N) seta.insert(A[i]), setc.insert(C[i]);
+    rep(j, 0, N){
+        auto ap = seta.lower_bound(B[j]);
+        auto cp = setc.upper_bound(B[j]);
+        if(ap == seta.begin() || cp == setc.end()) continue;
+        ap--;
+        seta.erase(ap);
+        setc.erase(cp);
+        cnt++;
+    }
+    cout << cnt << endl;
 }
