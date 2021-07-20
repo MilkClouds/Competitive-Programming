@@ -25,9 +25,6 @@ const int MAX = 50002;
 int N, T, C[MAX];
 string S;
 char E[MAX];
-void dfs(int u){
-
-}
 void solve(){
     cin >> N >> T >> S;
     fill(C, C + N + 1, 0);
