@@ -26,3 +26,16 @@ struct combinatorics {
 	const static int MOD1 = 998244353;
 	const static int MOD2 = 1e9 + 9;
 };
+
+
+long long pow(long long a, long long b) {
+	long long ret = 1;
+	while (b) {
+	if (b & 1) ret *= a;
+		a *= a;
+		a %= MOD;
+		ret %= MOD;
+		b >>= 1;
+	}
+	return ret;
+}
