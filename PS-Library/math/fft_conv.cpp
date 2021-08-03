@@ -1,3 +1,6 @@
+const double PI = acos(-1);
+typedef complex<double> cpx;
+
 void fft(vector<cpx> &f, cpx w) {
 	int n = f.size();
 	if (n == 1) return;
