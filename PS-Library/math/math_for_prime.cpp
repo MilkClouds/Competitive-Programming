@@ -10,7 +10,7 @@ void eratos() {
 	}
 }
 // #####################################################################
-// version 2
+// version 2 _ for decomposition
 const ll MAX = 3e6;
 vector<ll> pn;
 ll arr[MAX];
