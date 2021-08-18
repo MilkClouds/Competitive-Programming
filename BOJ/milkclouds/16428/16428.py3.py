@@ -1,6 +1,6 @@
-a,b=map(int,input().split())
-c,d=divmod(a,b)
-if a!=0 and b<0:
-	c,d=c+1,d-b
-print(c)
-print(d)
+a, b = map(int, input().split())
+c, d = divmod(a, b)
+if d < 0:
+	d -= b
+	c += 1
+print(c, d, sep = '\n')
