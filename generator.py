@@ -20,3 +20,5 @@ for i in range(10):
         file.write("%d %d\n" % (L, R))
     with open('test/out/%d.txt' % (i + 1), 'w') as file:
         file.write("%d\n" % solve(L, R))
+    
+print(1)
