@@ -25,7 +25,7 @@ void eratos() {
 
 ll gcd(ll x, ll y){
     if(x % y == 0) return y;
-    return gcd(x, y % x);
+    return gcd(y, x % y);
 }
 
 ll euler_phi(ll x){
