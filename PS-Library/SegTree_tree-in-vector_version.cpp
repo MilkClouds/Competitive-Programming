@@ -19,7 +19,7 @@ public:
     ll query(int k){
         return query(0, 0, N, k);
     }
-    void update(int k, int x){
+    void update(int k, ll x){
         update(0, 0, N, k, x);
     }
     void traverse(){
@@ -71,22 +71,20 @@ private:
 class SegTree{
 public:
     SegTree() : SegTree(0) {}
-    SegTree(int N): N(N), tree(N * 4), lazy(N * 4){
-        init(1, 0, N, vector<ll>(N, 0));
-    }
-    SegTree(int N, vector<ll>& v): N(N), tree(N * 4){
-        init(1, 0, N, v);
+    SegTree(int N): SegTree(N, vector<ll>(N, 0)) {}
+    SegTree(int N, vector<ll> v): N(N), tree(N * 4), lazy(N * 4){
+        init(0, 0, N, v);
     }
     // range query
     ll query(int s, int e){
-        return query(1, 0, N, s, e);
+        return query(0, 0, N, s, e);
     }
     // query
     ll query(int k){
-        return query(1, 0, N, k);
+        return query(0, 0, N, k);
     }
-    void update(int s, int e, int x){
-        update(1, 0, N, s, e, x);
+    void update(int s, int e, ll x){
+        update(0, 0, N, s, e, x);
     }
 private:
     int N;
@@ -96,7 +94,7 @@ private:
             return tree[node] = v[l];
         }
         int m = l + r >> 1;
-        tree[node] = init(node * 2 + 1, l, m, v) + init(node * 2 + 2, m, r, v);
+        return tree[node] = init(node * 2 + 1, l, m, v) + init(node * 2 + 2, m, r, v);
     }
     void push(int node, int l, int r){
         if(lazy[node] == 0) return;
@@ -110,31 +108,32 @@ private:
     }
     ll query(int node, int l, int r, int s, int e){
         push(node, l, r);
-        if(s <= l && r <= e) return tree[node];
         if(r <= s || e <= l) return 0;
+        if(s <= l && r <= e) return tree[node];
         int m = l + r >> 1;
         return query(node * 2 + 1, l, m, s, e) + query(node * 2 + 2, m, r, s, e);
     }
     ll query(int node, int l, int r, int k){
         push(node, l, r);
-        if(r - l == 1) return tree[node];
         if(k < l || r <= k) return 0;
+        if(r - l == 1) return tree[node];
         int m = l + r >> 1;
         return query(node * 2 + 1, l, m, k) + query(node * 2 + 2, m, r, k);
     }
-    void update(int node, int l, int r, int s, int e, ll x){
+    ll update(int node, int l, int r, int s, int e, ll x){
         push(node, l, r);
-        if(r <= s || e <= l) return;
+        if(r <= s || e <= l) return tree[node];
         if(s <= l && r <= e){
             lazy[node] += x;
             push(node, l, r);
+            return tree[node];
         }
         int m = l + r >> 1;
         update(node * 2 + 1, l, m, s, e, x);
         update(node * 2 + 2, m, r, s, e, x);
-        tree[node] = tree[node * 2 + 1] + tree[node * 2 + 2];
+        return tree[node] = tree[node * 2 + 1] + tree[node * 2 + 2];
     }
-}
+};
 
 
 /*
