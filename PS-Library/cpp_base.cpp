@@ -1,6 +1,3 @@
-# pragma GCC optimize ("O3")
-# pragma GCC optimize ("Ofast")
-# pragma GCC optimize ("unroll-loops")
 #include <bits/stdc++.h>
 #define rep(i,a,b) for(int i = (a); i < (b); i++)
 #define rep2(i,a,b) for(int i = (b) - 1; i >= (a); i--)
