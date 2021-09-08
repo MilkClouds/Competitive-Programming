@@ -18,36 +18,68 @@ using ti = tuple<int, int, int>;
 using pl = pair<ll, ll>;
 using tl = tuple<ll, ll, ll>;
 
-const int MAX = 1e5;
+const int MAX = 1e5 + 1, INF = 1e9;
 int N, M, u, v;
-vector<int> adj[MAX];
+set<int> adj[MAX];
+vector<int> V[MAX];
 
-int S[MAX], cycles;
-bool isCut[MAX];
-int dfs(int u, int nth = 0){
+int S[MAX], cycle[MAX], cycles;
+set<pi> isCut;
+int dfs(int u, int pre, int nth = 0){
     S[u] = ++nth;
-    int ret = S[u], childs = 0;
+    int ret = S[u];
     for(auto v: adj[u]){
+        if(v == pre) continue;
         if(S[v] == 0){
-            childs++;
-            int child = dfs(v, nth);
-            if(nth > 1 && S[u] <= child) isCut[u] = ;
+            int child = dfs(v, u, nth);
+            if(S[u] < child) isCut.emplace(min(u, v), max(u, v));
             ret = min(ret, child);
         }
         else ret = min(ret, S[v]);
     }
-    if(nth == 1 && childs >= 2) isCut[u] = 1;
     return ret;
 }
-int solve(int u, int )
+// void dfs2(int u, int nth = 0){
+//     if(isCut[u]) cycles++;
+//     cycle[u] = cycles;
+//     V[cycles].eb(u);
+//     S[u] = ++nth;
+//     for(auto v: adj[u]){
+//         if(S[v] == 0) dfs2(v, nth);
+//     }
+// }
+int dp[MAX][2][2];
+int solve(int u, bool croot, bool here){
+    int& ans = dp[u][croot][here];
+    if(~ans) return ans;
+    if(croot && adj[V[cycle[u]][0]].count(u)){
+        if(here) return ans = -INF;
+    }
+    ans = 0;
+    for(auto v: adj[u]){
+        if(cycle[u] ^ cycle[v]){
+            if(!here) ans = max(ans, solve(v, 1, 1));
+            ans = max(ans, solve(v, 0, 0));
+        } else {
+            if(!here) ans = max(ans, solve(v, croot, 1));
+            ans = max(ans, solve(v, croot, 0));
+        }
+    }
+    return ans += here;
+}
 int main() {
     cin.tie(0) -> sync_with_stdio(false); cout.tie(0);
     cin >> N >> M;
     rep(i, 0, M){
         cin >> u >> v; u--; v--;
-        adj[u].eb(v);
-        adj[v].eb(u);
+        adj[u].em(v);
+        adj[v].em(u);
     }
-    rep(i, 0, N) if(S[i] == 0) dfs(i); 
-    rep(i, 0, N) cout << isCut[i];
+    rep(i, 0, N) if(S[i] == 0) dfs(i, -1);
+    for(auto [u, v]: isCut) cout << u << " " << v << endl;
+    fill(S, S + N, 0);
+    // rep(i, 0, N) if(S[i] == 0) dfs2(i);
+    // cout << isCut[0] << endl;
+    cout << solve(0, 0, 0) << endl;
+    cout << solve(0, 1, 1) << endl;
 }
