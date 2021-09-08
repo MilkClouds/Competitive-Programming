@@ -1,0 +1,1 @@
+print(*({"ARC", "ABC", "AGC", "AHC"} - {input(), input(), input()}))
