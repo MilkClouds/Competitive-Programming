@@ -55,7 +55,7 @@ struct CHT{
 	}
 
 	int nth(Line line){
-		// 기울기가 전과 같아서 평행한 경우는 안 구현함. stritly increasing 가정
+		// 기울기가 전과 같아서 평행한 경우는 안 구현함. strictly increasing 가정
 		int l = 0, r = top;
 		while (l < r)
 		{
@@ -65,10 +65,8 @@ struct CHT{
 		}
 		return l;
 	}
-	void insert(Line line, int i, ABC& rem){
+	void insert(Line line, int i){
 		top = nth(line);
-        rem.idx = top;
-        rem.line = lines[top];
 		lines[top] = line;
 		idx[top] = i;
 		top++;
