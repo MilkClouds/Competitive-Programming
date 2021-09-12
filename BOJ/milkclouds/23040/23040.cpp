@@ -18,16 +18,15 @@ using ti = tuple<int, int, int>;
 using pl = pair<ll, ll>;
 using tl = tuple<ll, ll, ll>;
 
-const int MAX = 1e5;
-ll N, u, v, dfsn[MAX], cnt, dp[MAX], ans;
-vector<int> adj[MAX];
+const int MAX = 1e5 + 11;
+ll N, u, v, dfsn[MAX], ans;
+vector<int> adj[MAX], vv;
 string S;
 void dfs(int u){
     if(S[u] == 'B' || dfsn[u]) return;
+    vv.pb(u);
     dfsn[u] = 1;
-    cnt++;
     for(auto v: adj[u]) dfs(v);
-    dp[u] = cnt;
 }
 
 int main() {
@@ -39,10 +38,10 @@ int main() {
         adj[v].pb(u);
     }
     cin >> S;
-    rep(i, 0, N) {cnt = 0; dfs(i);}
+    rep(i, 0, N) {dfs(i);for(auto u: vv) dfsn[u] = vv.size(); vv.clear();}
     rep(i, 0, N){
         if(S[i] != 'B') continue;
-        for(auto v: adj[i]) ans += dp[v];
+        for(auto v: adj[i]) ans += dfsn[v];
     }
     cout << ans << endl;
 }

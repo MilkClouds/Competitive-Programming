@@ -17,12 +17,8 @@ using pi = pair<int, int>;
 using ti = tuple<int, int, int>;
 using pl = pair<ll, ll>;
 using tl = tuple<ll, ll, ll>;
-//3+~-1
-//4+4-1
-//4+5--1
-//5+0-2
-//5+1-2
-int N, in, deg[6], out, ina[6];
+
+int N, in, out, ina[6];
 pi A[11];
 int main() {
     cin.tie(0) -> sync_with_stdio(false); cout.tie(0);
@@ -32,8 +28,6 @@ int main() {
         if(A[i].x > A[i].y) swap(A[i].x, A[i].y);
         if(A[i].x + 1 != A[i].y && A[i].y - 4 != A[i].x) in++, ina[A[i].x]++, ina[A[i].y]++;
         else out++;
-        deg[A[i].x]++;
-        deg[A[i].y]++;
     }
     if(in <= 1) cout << 0;
     else if(in == 2){
@@ -42,8 +36,7 @@ int main() {
     }
     else if(in == 3) cout << 1;
     else if(in == 4){
-        if(out == 5) cout << 1;
-        else cout << 1;
+        cout << 1;
     } else {
         if(out == 5) cout << -1;
         else cout << 2;
