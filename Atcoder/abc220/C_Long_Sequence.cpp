@@ -1,5 +1,4 @@
 #include <bits/stdc++.h>
-#include <atcoder/modint>
 #define rep(i,a,b) for(int i = (a); i < (b); i++)
 #define rep2(i,a,b) for(int i = (b) - 1; i >= (a); i--)
 #define all(x) (x).begin(), (x).end()
@@ -18,21 +17,13 @@ using pi = pair<int, int>;
 using ti = tuple<int, int, int>;
 using pl = pair<ll, ll>;
 using tl = tuple<ll, ll, ll>;
-using mi = atcoder::modint998244353;
 
-const int MAX = 2e6 + 1;
-ll N, D;
-mi ans, tmp, A[MAX];
+const int MAX = 1e5 + 1;
+ll N, A[MAX], S[MAX], X;
 int main() {
     cin.tie(0) -> sync_with_stdio(false); cout.tie(0);
-    cin >> N >> D;
-    A[0] = 1;
-    rep(i, 1, MAX) A[i] = A[i - 1] * 2;
-    rep(i, 0, N){
-        tmp = 0;
-        if(i + D <= N - 1) tmp += A[D];
-        tmp += A[D - 2] * max(0LL, (1 + min(D - 1, (N - 1 - i)) - max(1LL, i + D + 1 - N)));
-        ans += tmp * 2 * A[i];
-    }
-    cout << ans.val();
+    cin >> N;
+    rep(i, 1, N + 1) cin >> A[i], S[i] = S[i - 1] + A[i];
+    cin >> X;
+    cout << ((X / S[N]) * N + upper_bound(S, S + N + 1, X % S[N]) - S) << endl;
 }
