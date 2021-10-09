@@ -13,7 +13,8 @@
 #define x first
 #define y second
 using namespace std;
-using ll = long long;
+using ll = int64_t;
+using ull = uint64_t;
 using ld = long double;
 using pi = pair<int, int>;
 using ti = tuple<int, int, int>;
