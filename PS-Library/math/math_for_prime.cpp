@@ -23,6 +23,16 @@ void eratos() {
 	}
 }
 
+vector<ll> divisors(ll n){
+    vector<ll> div;
+    rep(p, 1, (ll)sqrt(n) + 1) if(n % p == 0){
+        div.eb(p);
+        if(p != n / p) div.eb(n / p);
+    }
+    sort(all(div));
+    return div;
+}
+
 ll gcd(ll x, ll y){
     if(x % y == 0) return y;
     return gcd(y, x % y);
@@ -37,20 +47,24 @@ ll exEuclid(ll a, ll b, ll &s, ll &t) {
     return gcd;
 }
 
-
-
 ll euler_phi(ll x){
-    ll ret = 1;
-    for(auto p: pn){
-        ll tmp = 1;
-        while(x % p == 0){
-            x /= p;
-            tmp *= p;
-        }
-        if(tmp > 1){
-            ret *= tmp - tmp / p;
-        }
+    ll ret = x;
+    for(auto p: pn) if(x % p == 0){
+        while(x % p == 0) x /= p;
+        ret -= ret / p;
     }
-    if(x != 1) ret *= x - 1;
+    if(x != 1) ret -= ret / x;
     return ret;
+}
+
+long long pow(long long a, long long b) {
+	long long ret = 1;
+	while (b) {
+	if (b & 1) ret *= a;
+		a *= a;
+		a %= MOD;
+		ret %= MOD;
+		b >>= 1;
+	}
+	return ret;
 }

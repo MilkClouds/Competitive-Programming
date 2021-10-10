@@ -24,5 +24,5 @@ using tl = tuple<ll, ll, ll>;
 
 int main() {
     cin.tie(0) -> sync_with_stdio(false); cout.tie(0);
-
+    
 }

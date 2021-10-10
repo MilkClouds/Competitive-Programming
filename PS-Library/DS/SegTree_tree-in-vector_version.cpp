@@ -4,13 +4,14 @@ using namespace std;
 
 
 
-inline ll op_func(ll a, ll b){return a + b;}
+inline ll sum(ll a, ll b){return a + b;}
 
 struct SegTree{
 public:
     SegTree() : SegTree(0) {}
     explicit SegTree(int N): N(N), tree(N * 4, 0) {}
-    explicit SegTree(int N, vector<ll>& v): N(N), tree(N * 4, 0) {init(0, 0, N, v);}
+    explicit SegTree(vector<ll>& v, function<ll(ll, ll)> op_func = sum): SegTree(v.size(), v, op_func) {}
+    explicit SegTree(int N, vector<ll>& v, function<ll(ll, ll)> op_func = sum): N(N), tree(N * 4, 0), op_func(op_func) {init(0, 0, N, v);}
     // range query
     ll query(int s, int e){
         return query(0, 0, N, s, e);
@@ -28,6 +29,7 @@ public:
 private:
     int N;
     vector<ll> tree;
+    function<ll(ll, ll)> op_func;
     ll init(int node, int l, int r, vector<ll>& v){
         if(r - l == 1) {
             return tree[node] = v[l];

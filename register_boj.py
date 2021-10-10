@@ -6,6 +6,6 @@ if __name__ == '__main__':
     args = parser.parse_args()
     try:
         os.mkdir('.\BOJ\milkclouds\%s' % args.problemNum)
-        os.system('move %s .\BOJ\milkclouds\%s\%s.cpp' % (args.fileName, args.problemNum, args.problemNum))
     except: pass
+    os.system('move %s .\BOJ\milkclouds\%s\%s.cpp' % (args.fileName, args.problemNum, args.problemNum))
     
