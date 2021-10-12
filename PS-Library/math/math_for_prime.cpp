@@ -49,7 +49,21 @@ ll exEuclid(ll a, ll b, ll &s, ll &t) {
 
 ll euler_phi(ll x){
     ll ret = x;
-    for(auto p: pn) if(x % p == 0){
+    for(auto p: pn) {
+        if(p * p > x) break;
+        if(x % p == 0){
+            while(x % p == 0) x /= p;
+            ret -= ret / p;
+        }
+    }
+    if(x != 1) ret -= ret / x;
+    return ret;
+}
+
+// w/i pn vector
+ll euler_phi(ll x){
+    ll ret = x;
+    for(ll p = 2; p * p <= x; p++) if(x % p == 0){
         while(x % p == 0) x /= p;
         ret -= ret / p;
     }
