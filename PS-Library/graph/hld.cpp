@@ -1,4 +1,4 @@
-int sz[MAXV], dep[MAXV], par[MAXV], top[MAXV], in[MAXV], out[MAXV];
+int chk[MAXV], sz[MAXV], dep[MAXV], par[MAXV], top[MAXV], in[MAXV], out[MAXV], pv;
 vector<int> g[MAXV];
 /*
 sz[i] = i를 루트로 하는 서브트리의 크기
@@ -8,6 +8,16 @@ top[i] = i가 속한 체인의 가장 위에 있는 정점
 in[i], out[i] = dfs ordering
 g[i] = i의 자식 정점
 */
+
+void dfs(int v = 1){
+	chk[v] = 1;
+	for(auto i : adj[v]){
+		if(chk[i]) continue;
+		chk[i] = 1;
+		g[v].push_back(i);
+		dfs(i);
+	}
+}
 
 void dfs1(int v = 1){
 	sz[v] = 1;
