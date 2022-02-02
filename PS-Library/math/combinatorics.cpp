@@ -5,7 +5,7 @@ struct combinatorics {
 		rep(i, 2, N + 1) fac[i] = fac[i - 1] * i % MOD;
 		fac_inv[N] = pow(fac[N], MOD - 2);
 		rep2(i, 0, N) fac_inv[i] = fac_inv[i + 1] * (i + 1) % MOD;
-		rep(i, 1, N + 1)inv[i] = fac[i] * fac_inv[i - 1] % MOD;
+		rep(i, 1, N + 1)inv[i] = fac[i] * fWac_inv[i - 1] % MOD;
 	}
 	long long pow(long long a, long long b) {
 		long long ret = 1;
@@ -38,4 +38,23 @@ long long pow(long long a, long long b) {
 		b >>= 1;
 	}
 	return ret;
+}
+
+// ====================================
+
+mi fact[MAX], inv[MAX];
+
+void prepare(){
+    fact[0] = 1;
+    rep(i, 1, MAX){
+        fact[i] = fact[i - 1] * i;
+    }
+    inv[MAX - 1] = fact[MAX - 1].pow(fact[0].mod() - 2);
+    rep2(i, 1, MAX){
+        inv[i - 1] = inv[i] * i;
+    }
+}
+mi combination(int N, int r){
+    if(r < 0 || N < r) return 0;
+    return fact[N] * inv[r] * inv[N - r];
 }

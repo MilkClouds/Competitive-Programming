@@ -12,6 +12,9 @@ public:
         for(; i; i ^= i & -i) ret += tree[i];
         return ret;
     }
+    ll query(int i, int j){
+        return query(j) - query(i - 1);
+    }
     void update(int i, ll x) {
         i++;
         for(; i <= N; i += i & -i) tree[i] += x;

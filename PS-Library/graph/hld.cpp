@@ -1,5 +1,5 @@
-int sz[MAXV], dep[MAXV], par[MAXV], top[MAXV], in[MAXV], out[MAXV];
-vector<int> g[MAXV];
+int chk[MAXV], sz[MAXV], dep[MAXV], par[MAXV], top[MAXV], in[MAXV], out[MAXV], pv;
+vector<int> g[MAXV], adj[MAXV];
 /*
 sz[i] = i를 루트로 하는 서브트리의 크기
 dep[i] = i의 깊이
@@ -8,6 +8,36 @@ top[i] = i가 속한 체인의 가장 위에 있는 정점
 in[i], out[i] = dfs ordering
 g[i] = i의 자식 정점
 */
+
+struct FenwickTree {
+public:
+    FenwickTree() : FenwickTree(0) {}
+    explicit FenwickTree(int N) : N(N), tree(N + 1, 0) {}
+    ll query(int i) {
+        ll ret = 0;
+        for(; i; i ^= i & -i) ret += tree[i];
+        return ret;
+    }
+    ll query(int i, int j){
+        return query(j) - query(i - 1);
+    }
+    void update(int i, ll x) {
+        for(; i <= N; i += i & -i) tree[i] += x;
+    }
+private:
+    int N;
+    vector<ll> tree;
+} seg(MAXV);
+
+void dfs(int v = 1){
+	chk[v] = 1;
+	for(auto i : adj[v]){
+		if(chk[i]) continue;
+		chk[i] = 1;
+		g[v].push_back(i);
+		dfs(i);
+	}
+}
 
 void dfs1(int v = 1){
 	sz[v] = 1;
