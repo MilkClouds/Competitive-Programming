@@ -1,0 +1,1 @@
+[print("yes") for _ in range(int(input()))]
