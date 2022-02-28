@@ -6,29 +6,29 @@ typedef pair<int, int> pi;
 
 const int MAXN = 200010;
 
-vector<pi> adj[MAXN];
+vector<int> adj[MAXN];
 int sz[MAXN];
 bool vis[MAXN];
 
-int getSize(int u, int p) {				// 서브트리들의 크기를 구한다
+int getSize(int u, int p) {
 	sz[u] = 1;
-	for(auto e : adj[u]) if(!vis[e.y] && e.y != p) {
-		sz[u] += getSize(e.y, u);
+	for(auto v: adj[u]) if(!vis[v] && v != p) {
+		sz[u] += getSize(v, u);
 	}
 	return sz[u];
 }
-
-void solve(int u) {
+int _centroid(int u, int s){
+	for(auto v: adj[u]) if(!vis[v] && sz[v] < sz[u] && 2 * sz[v] >= s) return centroid(v, s);
+	return u;
+}
+int centroid(int u){
 	int s = getSize(u, -1);
-	while(1) {
-		bool b = false;
-		for(auto e : adj[u]) if(!vis[e.y] && sz[e.y] < sz[u] && 2 * sz[e.y] >= s) {
-			u = e.y;
-			b = true;
-			break;
-		}
-		if(!b) break;
-	}
+	return _centroid(u, s);
+}
+
+// centroid decomposition
+void solve(int u) {
+	u = centroid(u);
 	vis[u] = true;
-	for(auto e : adj[u]) if(!vis[e.y]) solve(e.y);	// 나누어진 서브트리에서 문제 해결
+	for(auto v: adj[u]) if(!vis[v]) solve(v);
 }
