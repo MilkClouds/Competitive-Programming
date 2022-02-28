@@ -18,7 +18,7 @@ int getSize(int u, int p) {
 	return sz[u];
 }
 int _centroid(int u, int s){
-	for(auto v: adj[u]) if(!vis[v] && sz[v] < sz[u] && 2 * sz[v] >= s) return centroid(v, s);
+	for(auto v: adj[u]) if(!vis[v] && sz[v] < sz[u] && 2 * sz[v] >= s) return _centroid(v, s);
 	return u;
 }
 int centroid(int u){
