@@ -29,4 +29,16 @@ template<class T> struct mi {
 		val = (val * m.val) % MOD;
 		return *this;
 	}
+	mi pow(ll N){
+		mi<T> ret(1), a(val);
+		for(; N; N >>= 1){
+			if(N & 1) ret *= a;
+			a *= a;
+		}
+		return ret;
+	}
 };
+template<class T>
+istream& operator >> (istream& is, mi<T>& m){return is >> m.val;}
+template<class T>
+ostream& operator << (ostream& os, mi<T>& m){return os << m.val;}
