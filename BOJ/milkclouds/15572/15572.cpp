@@ -1,6 +1,5 @@
-// BOJ 13725
-
 #include <bits/stdc++.h>
+#define rep(i,a,b) for(int i = (a); i < (b); i++)
 #define x first
 #define y second
 #define all(v) v.begin(), v.end()
@@ -75,12 +74,9 @@ namespace fft{
     }
     template<int W, int M>
     vector<MINT<M>> multiply_ntt(vector<MINT<M>> a, vector<MINT<M>> b){
-        int N = 2; while(N < a.size() + b.size()) N <<= 1;
-        a.resize(N); b.resize(N);
-        NTT<W, M>(a); NTT<W, M>(b);
-        for(int i=0; i<N; i++) a[i] *= b[i];
-        NTT<W, M>(a, true);
-        return a;
+        vector<MINT<M>> c(a.size() + b.size());
+        rep(i, 0, a.size()) rep(j, 0, b.size()) c[i + j] += a[i] * b[j];
+        return c;
     }
 }
 
@@ -178,7 +174,11 @@ struct PolyMod{
     PolyMod operator % (const PolyMod &b) const { return PolyMod(*this) %= b; }
 };
 
-constexpr int W = 3, MOD = 104857601;
+constexpr int W = 2, MOD = 1999;
+// constexpr int W = 13, MOD = 786433;
+// constexpr int W = 2, MOD = 1030307;
+// constexpr int W = 11, MOD = 9973;
+// constexpr int W = 2, MOD = 99149;
 using mint = MINT<MOD>;
 using poly = PolyMod<W, MOD>;
 
@@ -198,17 +198,16 @@ mint kitamasa(poly c, poly a, ll n){
     return ret;
 }
 
-int main(){
-    ios_base::sync_with_stdio(false); cin.tie(nullptr);
-    ll K, N; cin >> K >> N;
-    vector<mint> v_dp(K), v_rec(K);
-    for(int i=0; i<K; i++){
-        int t; cin >> t; v_dp[i] = mint(t);
-    }
-    for(int i=0; i<K; i++){
-        int t; cin >> t; v_rec[i] = mint(t);
-    }
+int main() {
+    cin.tie(0) -> sync_with_stdio(false); cout.tie(0);
+    ll N, M;
+    cin >> N >> M;
+    vector<mint> v_dp(N), v_rec(N);
+    rep(i, 0, N - 1) v_dp[i] = mint(2).pow(i);
+    v_dp[N - 1] = mint(2).pow(N) - mint(1);
+    rep(i, 0, N - 1) v_rec[i] = 1;
+    v_rec[N - 1] = mint(2).pow(N - 1);
     reverse(all(v_rec));
     poly dp(v_dp), rec(v_rec);
-    cout << kitamasa(rec, dp, N-1);
+    cout << kitamasa(v_rec, v_dp, M - 1) << endl;
 }
