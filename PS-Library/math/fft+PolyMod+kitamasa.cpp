@@ -122,6 +122,15 @@ struct PolyMod{
         return q.trim(n);
     }
 
+    T eval(const T x){
+        T tmp = T(1), ans = T(0);
+        for(auto &i: a){
+            ans += i * tmp;
+            tmp *= x;
+        }
+        return ans;
+    }
+
     // operation with scala value
     PolyMod operator *= (const T x){
         for(auto &i : a) i *= x;
