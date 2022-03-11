@@ -1,16 +1,23 @@
-// BOJ 13725
-
 #include <bits/stdc++.h>
+#define rep(i,a,b) for(int i = (a); i < (b); i++)
+#define rep2(i,a,b) for(int i = (b) - 1; i >= (a); i--)
+#define cinA(A, N) rep(i, 0, N) cin >> A[i];
+#define coutA(A, N) rep(i, 0, N) cout << A[i] << " ";
+#define all(x) (x).begin(), (x).end()
+#define pb push_back
+#define eb emplace_back
+#define popcount __builtin_popcount
+#define popcountll __builtin_popcountll
 #define x first
 #define y second
-#define all(v) v.begin(), v.end()
-#define compress(v) sort(all(v)), v.erase(unique(all(v)), v.end())
-#define IDX(v, x) (lower_bound(all(v), x) - v.begin())
 using namespace std;
-
-using uint = unsigned;
 using ll = long long;
-using ull = unsigned long long;
+using ull = uint64_t;
+using ld = long double;
+using pi = pair<int, int>;
+using ti = tuple<int, int, int>;
+using pl = pair<ll, ll>;
+using tl = tuple<ll, ll, ll>;
 
 template<int _M = 998244353, int _W = 3>
 struct MINT{
@@ -58,7 +65,6 @@ namespace fft{
             j += bit;
             if(i < j) swap(f[i], f[j]);
         }
-        // M-1 should have sufficient amount of factor 2 compared to N (2^k >= 2^ceil_pow2(N))
         T ang = pw(T(T::W), (T::M-1)/N); if(inv_fft) ang = inv(ang);
         root[0] = 1; for(int i=1; i<N>>1; i++) root[i] = root[i-1] * ang;
         for(int i=2; i<=N; i<<=1){
@@ -190,37 +196,147 @@ struct PolyMod{
     PolyMod operator % (const PolyMod &b) const { return PolyMod(*this) %= b; }
 };
 
-constexpr int W = 3, MOD = 104857601;
-using mint = MINT<>;
-using poly = PolyMod<mint>;
-
-mint kitamasa(poly c, poly a, ll n){
-    poly d = vector<mint>{1};
-    poly xn = vector<mint>{0, 1};
-    poly f;
-    if(a.size() > n) return a[n];
-    for(int i=0; i<c.size(); i++) f.push_back(-c[i]);
-    f.push_back(1);
-    while(n){
-        if(n & 1) d = d * xn % f;
-        n >>= 1; xn = xn * xn % f;
-    }
-    mint ret = 0;
-    for(int i=0; i<=a.deg(); i++) ret += a[i] * d[i];
-    return ret;
+// @param n `0 <= n`
+// @return minimum non-negative `x` s.t. `n <= 2**x`
+int ceil_pow2(int n) {
+    int x = 0;
+    while ((1U << x) < (unsigned int)(n)) x++;
+    return x;
 }
+template <class S, S (*op)(S&, S&), S (*e)()> struct segtree {
+  public:
+    segtree() : segtree(0) {}
+    explicit segtree(int n) : segtree(std::vector<S>(n, e())) {}
+    explicit segtree(const std::vector<S>& v) : _n(int(v.size())) {
+        log = ceil_pow2(_n);
+        size = 1 << log;
+        d = std::vector<S>(2 * size, e());
+        for (int i = 0; i < _n; i++) d[size + i] = v[i];
+        for (int i = size - 1; i >= 1; i--) {
+            update(i);
+        }
+    }
 
-int main(){
-    ios_base::sync_with_stdio(false); cin.tie(nullptr);
-    ll K, N; cin >> K >> N;
-    vector<mint> v_dp(K), v_rec(K);
-    for(int i=0; i<K; i++){
-        int t; cin >> t; v_dp[i] = mint(t);
+    void set(int p, S x) {
+        assert(0 <= p && p < _n);
+        p += size;
+        d[p] = x;
+        for (int i = 1; i <= log; i++) update(p >> i);
     }
-    for(int i=0; i<K; i++){
-        int t; cin >> t; v_rec[i] = mint(t);
+
+    S get(int p) const {
+        assert(0 <= p && p < _n);
+        return d[p + size];
     }
-    reverse(all(v_rec));
-    poly dp(v_dp), rec(v_rec);
-    cout << kitamasa(rec, dp, N-1);
+
+    S prod(int l, int r) const {
+        assert(0 <= l && l <= r && r <= _n);
+        S sml = e(), smr = e();
+        l += size;
+        r += size;
+
+        while (l < r) {
+            if (l & 1) sml = op(sml, d[l++]);
+            if (r & 1) smr = op(d[--r], smr);
+            l >>= 1;
+            r >>= 1;
+        }
+        return op(sml, smr);
+    }
+
+    S all_prod() const { return d[1]; }
+
+    template <bool (*f)(S)> int max_right(int l) const {
+        return max_right(l, [](S x) { return f(x); });
+    }
+    template <class F> int max_right(int l, F f) const {
+        assert(0 <= l && l <= _n);
+        assert(f(e()));
+        if (l == _n) return _n;
+        l += size;
+        S sm = e();
+        do {
+            while (l % 2 == 0) l >>= 1;
+            if (!f(op(sm, d[l]))) {
+                while (l < size) {
+                    l = (2 * l);
+                    if (f(op(sm, d[l]))) {
+                        sm = op(sm, d[l]);
+                        l++;
+                    }
+                }
+                return l - size;
+            }
+            sm = op(sm, d[l]);
+            l++;
+        } while ((l & -l) != l);
+        return _n;
+    }
+
+    template <bool (*f)(S)> int min_left(int r) const {
+        return min_left(r, [](S x) { return f(x); });
+    }
+    template <class F> int min_left(int r, F f) const {
+        assert(0 <= r && r <= _n);
+        assert(f(e()));
+        if (r == 0) return 0;
+        r += size;
+        S sm = e();
+        do {
+            r--;
+            while (r > 1 && (r % 2)) r >>= 1;
+            if (!f(op(d[r], sm))) {
+                while (r < size) {
+                    r = (2 * r + 1);
+                    if (f(op(d[r], sm))) {
+                        sm = op(d[r], sm);
+                        r--;
+                    }
+                }
+                return r + 1 - size;
+            }
+            sm = op(d[r], sm);
+        } while ((r & -r) != r);
+        return 0;
+    }
+    int _n, size, log;
+    std::vector<S> d;
+
+    void update(int k) { d[k] = op(d[2 * k], d[2 * k + 1]); }
+};
+
+using mint = MINT<>;
+using poly = PolyMod<>;
+poly S(poly& a, poly& b){return a * b;}
+poly e(){return poly(1);}
+using Seg = segtree<poly, S, e>;
+Seg tree;
+ll N, Q;
+vector<mint> a, b;
+void solve(int node, poly& P){
+    if(tree.size <= node){
+        if(node < tree.size + Q){
+            cout << P[0] + P[1] * b[node - tree.size] << "\n";
+        }
+        return;
+    }
+    poly& Q = tree.d[node];
+    poly&& R = P % Q;
+    solve(node * 2, R);
+    solve(node * 2 + 1, R);
+}
+int main() {
+    cin.tie(0) -> sync_with_stdio(false); cout.tie(0);
+    cin >> N >> Q;
+    a.resize(N + 1); b.resize(Q);
+    cinA(a, N + 1); cinA(b, Q);
+    reverse(all(a));
+    mint t = 1;
+    vector<poly> v;
+    rep(i, 0, Q){
+        v.eb(poly({-b[i], 1}));
+    }
+    tree = Seg(v);
+    poly aa = poly(a);
+    solve(1, aa);
 }
