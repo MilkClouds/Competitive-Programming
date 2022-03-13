@@ -4,7 +4,7 @@ using namespace std;
 
 const int MAX=101010;
 vector<int> pn;
-int sp[MAX], e[MAX], phi[MAX], mu[MAX], tau[MAX], sigma[MAX];
+ll sp[MAX], e[MAX], phi[MAX], mu[MAX], tau[MAX], sigma[MAX];
 ll pw(ll a, ll b){
     ll ret = 1;
     for(; b; b >>= 1, a *= a) if(b & 1) ret *= a;
@@ -12,8 +12,11 @@ ll pw(ll a, ll b){
 }
 // https://ahgus89.github.io/algorithm/Linear-sieve/
 // https://ahgus89.github.io/algorithm/Notation/
-// code below is not tested.
 void sieve(){
+    phi[1] = 1;
+    mu[1] = 1;
+    tau[1] = 1;
+    sigma[1] = 1;
     for(int i = 2; i < MAX; i++){
         if(!sp[i]){
             pn.push_back(i);
