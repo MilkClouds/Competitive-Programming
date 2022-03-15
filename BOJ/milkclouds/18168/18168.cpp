@@ -316,7 +316,7 @@ vector<mint> a, b;
 void solve(int node, poly& P){
     if(tree.size <= node){
         if(node < tree.size + Q){
-            cout << P[0] + P[1] * b[node - tree.size] << "\n";
+            cout << P[0] + (P.size() > 1 ? P[1] * b[node - tree.size] : mint(0)) << "\n";
         }
         return;
     }
@@ -331,7 +331,6 @@ int main() {
     a.resize(N + 1); b.resize(Q);
     cinA(a, N + 1); cinA(b, Q);
     reverse(all(a));
-    mint t = 1;
     vector<poly> v;
     rep(i, 0, Q){
         v.eb(poly({-b[i], 1}));
