@@ -17,3 +17,16 @@ namespace CRT{
         return a.v * i1 * M2M3 + b.v * i2 * M1M3 + c.v * i3 * M1M2;
     }
 }
+namespace CRT{
+    using ull = unsigned long long;
+    static constexpr ull MOD1 = 754974721, W1 = 11;  // 2^24
+    static constexpr ull MOD2 = 167772161, W2 = 11;  // 2^25
+    static constexpr ull M1M2 = MOD1 * MOD2;
+    static constexpr ull i1 = 323560596;
+    static constexpr ull i2 = 95869806;
+    using mint1 = MINT<MOD1, W1>;
+    using mint2 = MINT<MOD2, W2>;
+    mint CRT(mint1 a, mint2 b){
+        return (a.v * i1) % MOD1 * MOD2 + (b.v * i2) % MOD2 * MOD1;
+    }
+}
