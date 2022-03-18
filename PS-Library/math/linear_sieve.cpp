@@ -47,3 +47,29 @@ void sieve(){
         }
     }
 }
+
+
+// ======================================================================
+vector<int> pn;
+ll sp[MAX];
+ll pw(ll a, ll b){
+    ll ret = 1;
+    for(; b; b >>= 1, a = (a * a) % MOD) if(b & 1) ret = ret * a % MOD;
+    return ret;
+}
+// https://ahgus89.github.io/algorithm/Linear-sieve/
+// https://ahgus89.github.io/algorithm/Notation/
+void sieve(){
+    for(int i = 2; i < MAX; i++){
+        if(!sp[i]){
+            pn.push_back(i);
+            sp[i] = i;
+        }
+        for(auto j: pn){
+            if(i * j >= MAX) break; //!ll
+            // j: i*j의 최소인수(because j<(i의 최소인수))
+            sp[i * j] = j;
+            if(i % j == 0)break; // j==(i의 최소인수)이면 break
+        }
+    }
+}
