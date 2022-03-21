@@ -20,6 +20,7 @@ void sieve(){
     for(int i = 2; i < MAX; i++){
         if(!sp[i]){
             pn.push_back(i);
+            sp[i] = i;
             e[i] = 1;
             phi[i] = i - 1;
             mu[i] = -1;
@@ -52,11 +53,6 @@ void sieve(){
 // ======================================================================
 vector<int> pn;
 ll sp[MAX];
-ll pw(ll a, ll b){
-    ll ret = 1;
-    for(; b; b >>= 1, a = (a * a) % MOD) if(b & 1) ret = ret * a % MOD;
-    return ret;
-}
 // https://ahgus89.github.io/algorithm/Linear-sieve/
 // https://ahgus89.github.io/algorithm/Notation/
 void sieve(){
