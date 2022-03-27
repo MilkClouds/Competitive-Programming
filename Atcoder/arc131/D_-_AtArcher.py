@@ -1,4 +1,4 @@
-import sys, bisect
+import sys
 input = sys.stdin.readline
 N, M, D = map(int, input().split())
 r = [*map(int, input().split())][1:]
