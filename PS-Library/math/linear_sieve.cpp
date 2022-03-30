@@ -50,6 +50,21 @@ void sieve(){
 }
 
 
+// =================
+ll get_phi(ll N){
+    if(N < MAX) return phi[N];
+    ll ret = 1;
+    for(auto i: pn){
+        if(N % i) continue;
+        ll t = 1;
+        for(; N % i == 0; N /= i, t *= i);
+        ret *= t - t / i;
+    }
+    if(N > 1) ret *= N - 1;
+    return ret;
+}
+
+
 // ======================================================================
 vector<int> pn;
 ll sp[MAX];
