@@ -34,7 +34,6 @@ pq = []
 heappush(pq, Partition(sum(A[i][0] for i in range(N)), 0, 0))
 ans = 0
 for i in range(K):
-    assert(len(pq))
     u = heappop(pq)
     ans += u.S
     for v in u.nxt():
