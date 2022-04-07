@@ -35,7 +35,6 @@ bool relax(){
 int main() {
     cin.tie(0) -> sync_with_stdio(false); cout.tie(0);
     cin >> N >> A >> B;
-    rep(i, 1, N) edges.eb(i + 1, i, 0);
     rep(i, 0, A){
         cin >> u >> v >> d;
         edges.eb(u, v, d);
