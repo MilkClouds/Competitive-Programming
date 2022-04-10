@@ -11,16 +11,15 @@ from math import *
 #     return ans
 
 for i in range(1):
-    N = 10 ** 4
-    Q = 10 ** 5
+    N = 1 * 10 ** 4
     Qs = []
-    for i in range(Q):
-        A, B = randint(2, N - 1), randint(0, 10 ** 9 + 7 - 1)
-        Qs.append((A, B))
+    for i in range(N):
+        A, B, C = randint(1, 150), randint(1, 150), randint(1, 10 ** 9)
+        Qs.append((A, B, C))
     with open('test/in/%d.txt' % (i + 1), 'w') as file:
-        file.write("%d %d\n" % (N, Q))
-        for i in range(Q):
-            file.write("%d %d\n" % Qs[i])
+        file.write("%d\n" % (N))
+        for i in range(N):
+            file.write("%d %d %d\n" % Qs[i])
     # with open('test/out/%d.txt' % (i + 1), 'w') as file:
         # file.write("%d\n" % solve(L, R))
     
