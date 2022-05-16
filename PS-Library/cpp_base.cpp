@@ -1,6 +1,6 @@
 #include <bits/stdc++.h>
-#define rep(i,a,b) for(int i = (a); i < (b); i++)
-#define rep2(i,a,b) for(int i = (b) - 1; i >= (a); i--)
+#define rep(i,a,b) for(ll i = (a); i < (b); i++)
+#define rep2(i,a,b) for(ll i = (b) - 1; i >= (a); i--)
 #define cinA(A, N) rep(i, 0, N) cin >> A[i];
 #define coutA(A, N) rep(i, 0, N) cout << A[i] << " ";
 #define all(x) (x).begin(), (x).end()
