@@ -74,7 +74,7 @@ ll euler_phi(ll x){
 long long pow(long long a, long long b) {
 	long long ret = 1;
 	while (b) {
-	if (b & 1) ret *= a;
+	    if (b & 1) ret *= a;
 		a *= a;
 		a %= MOD;
 		ret %= MOD;
